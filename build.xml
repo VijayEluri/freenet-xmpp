@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="XMPP" default="jar">
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="build" />
+	<property name="lib.dir" value="lib" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="jar.dir" value="${build.dir}/jar" />
+	<property name="main-class" value="xmpp.XMPP" />
+	<property name="smack" value="smack" />
+	<property name="smackx" value="smackx" />
+	<property name="commons-beanutils" value="commons-beanutils-1.7.0" />
+	<property name="commons-collections" value="commons-collections-3.2" />
+	<property name="commons-logging" value="commons-logging-1.1.1" />
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on">
+			<classpath>
+				<pathelement location="/home/jonas/Freenet/freenet-stable-latest.jar" />
+				<pathelement location="${lib.dir}/*.jar" />
+				<pathelement location="${lib.dir}/${smack}.jar" />
+				<pathelement location="${lib.dir}/${smackx}.jar" />
+				<pathelement location="${lib.dir}/${commons-beanutils}.jar" />
+				<pathelement location="${lib.dir}/${commons-collections}.jar" />
+				<pathelement location="${lib.dir}/${commons-logging}.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="clean,compile">
+		<mkdir dir="${jar.dir}" />
+
+		<unzip src="${lib.dir}/${smack}.jar" dest="${classes.dir}" />
+		<unzip src="${lib.dir}/${smackx}.jar" dest="${classes.dir}" />
+		<unzip src="${lib.dir}/${commons-beanutils}.jar" dest="${classes.dir}" />
+		<unzip src="${lib.dir}/${commons-collections}.jar" dest="${classes.dir}" />
+		<unzip src="${lib.dir}/${commons-logging}.jar" dest="${classes.dir}" />
+		
+		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}" includes="**/*.class">
+			<manifest>
+				<attribute name="Plugin-Main-Class" value="${main-class}" />
+			</manifest>
+		</jar>
+
+	</target>
+</project>
